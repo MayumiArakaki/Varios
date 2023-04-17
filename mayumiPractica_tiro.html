@@ -1,0 +1,57 @@
+<h1> Pizarra Interactiva</h1>
+<canvas width="600" height="400"></canvas>
+<script>
+    var pizarra = document.querySelector("canvas")
+    var pincel = pizarra.getContext("2d")
+
+    pincel.fillStyle = "grey"
+    pincel.fillRect(0,0,600,400)
+    var radio = 10
+    var xAleatorio
+    var yAleatorio
+
+    function dibujarCircunferencia(x,y,radio,color){
+        pincel.fillStyle = color
+        pincel.beginPath()
+        pincel.arc(x,y,radio,0,2*Math.PI)
+        pincel.fill()
+    }
+
+    function limpiarPantalla(){
+        pincel.clearRect(0,0,600,400)
+    }
+
+    function dibujarObjetivo(x,y){
+        dibujarCircunferencia(x,y,radio+20,"red")
+        dibujarCircunferencia(x,y,radio+10,"white")
+        dibujarCircunferencia(x,y,radio,"red")
+    }
+
+    function sortearPosicion(maximo){
+        return Math.floor(Math.random()*maximo)
+    }
+
+    function actualizarPantalla(){
+        limpiarPantalla()
+        xAleatorio = sortearPosicion(600)
+        yAleatorio = sortearPosicion(400)
+        dibujarObjetivo(xAleatorio,yAleatorio)
+    } 
+
+    setInterval(actualizarPantalla,1000)
+
+    function tiroAlBlanco(evento){
+        var x = evento.pageX - pizarra.offsetLeft
+        var y = evento.pageY - pizarra.offsetTop
+
+        if ((x < xAleatorio + radio) &&
+            (x > xAleatorio - radio) &&
+            (y < yAleatorio + radio) &&
+            (y > yAleatorio - radio)){
+                alert ("TIRO CERTERO")
+            }
+    }
+
+    pizarra.onclick = tiroAlBlanco
+
+</script>
